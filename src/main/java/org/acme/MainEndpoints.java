@@ -17,22 +17,22 @@ public class MainEndpoints {
 
     public ArrayList<String> activeAccounts = new ArrayList<>();
 
-    public HashMap<String, String> userData;
-
     /**
      * Correct login example call:
-     curl -H "Content-Type: application/json" -H "Accept: text/plain" -X POST -d '{"username":"julius","password":"foobar"}' "http://localhost:8080/myPath/login"
+     curl -H "Content-Type: application/json" -H "Accept: application/json" -X POST -d '{"username":"julius", "password":"foobar"}' "http://localhost:8080/myPath/login"
 
      * Incorrect login example call:
-     curl -H "Content-Type: application/json" -H "Accept: text/plain" -X POST -d '{"username":"jonas","password":"wrongPass"}' "http://localhost:8080/myPath/login"
+     curl -H "Content-Type: application/json" -H "Accept: application/json" -X POST -d '{"username":"jonas", "password":"WRONG-PASSWORD"}' "http://localhost:8080/myPath/login"
      */
     @POST
     @Path("/login")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String login(LoginEntity loginEntity){
+    public LoginEntity login(LoginEntity loginEntity){
         if (Objects.equals(loginEntity.getJsonbUsername(), "julius") && Objects.equals(loginEntity.getJsonbPass(), "foobar")){
-            loginEntity.setJsonbStatus("0");
+
+            // The account exists - set status to 200
+            loginEntity.setJsonbStatus("200");
 
             // Create fake web token and set the property of the JsonbLogin object to said token
             LoginTokenEntity token = new LoginTokenEntity(loginEntity.getJsonbUsername());
@@ -42,16 +42,14 @@ public class MainEndpoints {
             activeAccounts.add(token.getFakedToken());
             System.out.println("Active accounts: " + activeAccounts);
 
-            //Return final Jsonb as String
-            return "Status: " + loginEntity.getJsonbStatus() + ", Username: " + loginEntity.getJsonbUsername()
-                    + ", loginToken:" + loginEntity.getJsonbToken();
+            //Return final Jsonb
+            return loginEntity;
 
         } else {
-
             // Should account not match, return status 404
             loginEntity.setJsonbStatus("404");
-            return loginEntity.toString();
         }
+        return loginEntity;
     }
 
     /**
