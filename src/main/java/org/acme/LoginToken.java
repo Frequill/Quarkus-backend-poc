@@ -2,11 +2,11 @@ package org.acme;
 
 import java.time.LocalTime;
 
-public class LoginTokenEntity {
+public class LoginToken {
 
     private String fakedToken;
 
-    public LoginTokenEntity(String user){
+    public LoginToken(String user){
         LocalTime time = LocalTime.now();
         setFakedToken(user + time.toString());
     }

@@ -16,10 +16,10 @@ public class MainEndpointsTest {
     @Test
     public void testHelloEndpoint() {
         given()
-                .when().get("/myPath")
+                .when().get("/myPath/hello")
                 .then()
                 .statusCode(200)
-                .body(is("Hello from RESTEasy Reactive"));
+                .body(is("Hello from Julius Thomsen"));
     }
 
     /**

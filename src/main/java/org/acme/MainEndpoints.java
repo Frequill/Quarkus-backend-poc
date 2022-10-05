@@ -10,12 +10,25 @@ import java.util.Objects;
 public class MainEndpoints {
 
     @GET
+    @Path("/hello")
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return "Hello from RESTEasy Reactive";
+        return "Hello from Julius Thomsen";
     }
 
-    public ArrayList<String> activeAccounts = new ArrayList<>();
+    /**
+     These two placeholders reset upon reload of code (kinda sucks)
+     */
+    public HashMap<String, User> allUsers = new HashMap<>(); // All created accounts
+    public ArrayList<String> activeAccounts = new ArrayList<>(); // All accounts currently logged-in
+
+
+    //Mini-constructor adds a "testUser" into the "allUsers" hashmap just so one is always there by default during development
+    public MainEndpoints(){
+        User testBoy = new User("testUser", "password", "test.user@gmail.com");
+        allUsers.put(testBoy.getUsername(), testBoy);
+    }
+
 
     /**
      * Correct login example call:
@@ -29,13 +42,14 @@ public class MainEndpoints {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public LoginEntity login(LoginEntity loginEntity){
-        if (Objects.equals(loginEntity.getJsonbUsername(), "julius") && Objects.equals(loginEntity.getJsonbPass(), "foobar")){
+        // Checks if a user with the inputted username exists and if that users password also matches inputted password
+        if (Objects.equals(loginEntity.getJsonbPass(), allUsers.get(loginEntity.getJsonbUsername()).getPassword())){
 
             // The account exists - set status to 200
             loginEntity.setJsonbStatus("200");
 
             // Create fake web token and set the property of the JsonbLogin object to said token
-            LoginTokenEntity token = new LoginTokenEntity(loginEntity.getJsonbUsername());
+            LoginToken token = new LoginToken(loginEntity.getJsonbUsername());
             loginEntity.setJsonbToken(token.getFakedToken());
 
             // Since this is a local application, the logged-in users are simply added to an ArrayList
@@ -47,7 +61,7 @@ public class MainEndpoints {
 
         } else {
             // Should account not match, return status 404
-            loginEntity.setJsonbStatus("404");
+            loginEntity.setJsonbStatus("404 - User does not seem to exist...");
         }
         return loginEntity;
     }
@@ -56,8 +70,8 @@ public class MainEndpoints {
      * Loggs out user if currently logged-in.
      * Logged-in users tokens are stored in arrayList "activeAccounts"
 
-     * If you want to try this method, copy your login-token from backend-terminal after logged in,
-       then use it as your parameter
+     * If you want to try this method, copy your login-token from backend-terminal after logged in (active accounts),
+       then use it as your parameter curl http://localhost:8080/myPath/logout/**TOKEN HERE**
      */
     @GET
     @Path("/logout/{token}")
@@ -70,6 +84,25 @@ public class MainEndpoints {
             }
         }
         return "No such account is active in current session...";
+    }
+
+    @GET
+    @Path("/mkUser/{username}/{password}/{email}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String createUser(String username, String password, String email){
+        User u = new User(username, password, email);
+        allUsers.put(username, u);
+
+        System.out.println("allUsers: " + allUsers);
+        return "User " + username + " successfully added!";
+    }
+
+    @GET
+    @Path("/getAllUsers")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getAllUsers(){
+        System.out.println("All users = " + allUsers);
+        return "All users = " + allUsers;
     }
 
 }
