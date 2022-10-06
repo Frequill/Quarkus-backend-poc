@@ -13,6 +13,7 @@ public class MainEndpoints {
     @Path("/hello")
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
+        System.out.println("Hello message was sent! ;)");
         return "Hello from Julius Thomsen";
     }
 
