@@ -1,4 +1,4 @@
-package org.acme;
+package com.teliacompany.backend.poc.jsonbentities;
 
 import javax.json.bind.annotation.JsonbProperty;
 

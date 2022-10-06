@@ -1,4 +1,8 @@
-package org.acme;
+package com.teliacompany.backend.poc;
+
+import com.teliacompany.backend.poc.entities.LoginToken;
+import com.teliacompany.backend.poc.entities.User;
+import com.teliacompany.backend.poc.jsonbentities.LoginEntity;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

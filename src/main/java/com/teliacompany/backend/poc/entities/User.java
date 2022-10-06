@@ -1,4 +1,4 @@
-package org.acme;
+package com.teliacompany.backend.poc.entities;
 
 public class User {
 
