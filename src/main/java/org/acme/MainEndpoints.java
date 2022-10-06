@@ -33,10 +33,10 @@ public class MainEndpoints {
 
     /**
      * Correct login example call:
-     curl -H "Content-Type: application/json" -H "Accept: application/json" -X POST -d '{"username":"julius", "password":"foobar"}' "http://localhost:8080/myPath/login"
+     curl -H "Content-Type: application/json" -H "Accept: application/json" -X POST -d '{"username":"testUser", "password":"password"}' "http://localhost:8082/myPath/login"
 
      * Incorrect login example call:
-     curl -H "Content-Type: application/json" -H "Accept: application/json" -X POST -d '{"username":"jonas", "password":"WRONG-PASSWORD"}' "http://localhost:8080/myPath/login"
+     curl -H "Content-Type: application/json" -H "Accept: application/json" -X POST -d '{"username":"jonas", "password":"WRONG-PASSWORD"}' "http://localhost:8082/myPath/login"
      */
     @POST
     @Path("/login")
