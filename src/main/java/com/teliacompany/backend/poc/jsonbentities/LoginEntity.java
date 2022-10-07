@@ -4,12 +4,12 @@ import javax.json.bind.annotation.JsonbProperty;
 
 public class LoginEntity {
 
+    // BACKEND login entity should NOT contain loginToken
+
     @JsonbProperty("status")
     private String jsonbStatus;
     @JsonbProperty("username")
     private String jsonbUsername;
-    @JsonbProperty("loginToken")
-    private String jsonbToken;
     @JsonbProperty("password")
     private String jsonbPass;
 
@@ -37,14 +37,6 @@ public class LoginEntity {
 
     public void setJsonbUsername(String jsonbUsername) {
         this.jsonbUsername = jsonbUsername;
-    }
-
-    public String getJsonbToken() {
-        return jsonbToken;
-    }
-
-    public void setJsonbToken(String jsonbToken) {
-        this.jsonbToken = jsonbToken;
     }
 
     public String getJsonbPass() {

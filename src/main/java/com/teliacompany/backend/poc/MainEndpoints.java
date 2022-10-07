@@ -25,7 +25,7 @@ public class MainEndpoints {
      These two placeholders reset upon reload of code (kinda sucks)
      */
     public HashMap<String, UserEntity> allUsers = new HashMap<>(); // All created accounts
-    public ArrayList<String> activeAccounts = new ArrayList<>(); // All accounts currently logged-in
+    public HashMap<String, LoginToken> activeAccounts = new HashMap<>(); // All accounts currently logged-in
 
 
     //Mini-constructor adds a "testUser" into the "allUsers" hashmap just so one is always there by default during development
@@ -47,19 +47,29 @@ public class MainEndpoints {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public LoginEntity login(LoginEntity loginEntity){
+
+        if (activeAccounts.containsKey(loginEntity.getJsonbUsername())) {
+            loginEntity.setJsonbUsername("");
+            loginEntity.setJsonbPass("");
+            loginEntity.setJsonbStatus("500 : THIS ACCOUNT IS ALREADY LOGGED-IN");
+            return loginEntity;
+        }
+
+
         // Checks if a user with the inputted username exists and if that users password also matches inputted password
         if (Objects.equals(loginEntity.getJsonbPass(), allUsers.get(loginEntity.getJsonbUsername()).getPassword())){
 
             // The account exists - set status to 200
             loginEntity.setJsonbStatus("200");
 
-            // Create fake web token and set the property of the JsonbLogin object to said token
+            // Create fake web token and store it in a Hashmap, so we can keep track of active accounts
             LoginToken token = new LoginToken(loginEntity.getJsonbUsername());
-            loginEntity.setJsonbToken(token.getFakedToken());
+            activeAccounts.put(loginEntity.getJsonbUsername(), token);
 
-            // Since this is a local application, the logged-in users are simply added to an ArrayList
-            activeAccounts.add(token.getFakedToken());
-            System.out.println("Active accounts: " + activeAccounts);
+
+            // TEST Want to see what the result looks like in "activeAccounts" hashmap
+            System.out.println("Result in activeAccounts = " + loginEntity.getJsonbUsername() + " " +
+                    activeAccounts.get(loginEntity.getJsonbUsername()).getFakedToken());
 
             //Return final Jsonb
             return loginEntity;
