@@ -1,7 +1,7 @@
 package com.teliacompany.backend.poc;
 
 import com.teliacompany.backend.poc.entities.LoginToken;
-import com.teliacompany.backend.poc.entities.User;
+import com.teliacompany.backend.poc.jsonbentities.UserEntity;
 import com.teliacompany.backend.poc.jsonbentities.LoginEntity;
 
 import javax.ws.rs.*;
@@ -24,13 +24,13 @@ public class MainEndpoints {
     /**
      These two placeholders reset upon reload of code (kinda sucks)
      */
-    public HashMap<String, User> allUsers = new HashMap<>(); // All created accounts
+    public HashMap<String, UserEntity> allUsers = new HashMap<>(); // All created accounts
     public ArrayList<String> activeAccounts = new ArrayList<>(); // All accounts currently logged-in
 
 
     //Mini-constructor adds a "testUser" into the "allUsers" hashmap just so one is always there by default during development
     public MainEndpoints(){
-        User testBoy = new User("testUser", "password", "test.user@gmail.com");
+        UserEntity testBoy = new UserEntity("testUser", "password", "test.user@gmail.com");
         allUsers.put(testBoy.getUsername(), testBoy);
     }
 
@@ -71,12 +71,22 @@ public class MainEndpoints {
         return loginEntity;
     }
 
+    @POST
+    @Path("/mkUser")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public UserEntity createUser(UserEntity userEntity){
+        allUsers.put(userEntity.getUsername(), userEntity);
+        System.out.println("allUsers: " + allUsers);
+        return userEntity;
+    }
+
     /**
      * Loggs out user if currently logged-in.
      * Logged-in users tokens are stored in arrayList "activeAccounts"
 
      * If you want to try this method, copy your login-token from backend-terminal after logged in (active accounts),
-       then use it as your parameter curl http://localhost:8080/myPath/logout/**TOKEN HERE**
+     then use it as your parameter curl http://localhost:8080/myPath/logout/**TOKEN HERE**
      */
     @GET
     @Path("/logout/{token}")
@@ -89,17 +99,6 @@ public class MainEndpoints {
             }
         }
         return "No such account is active in current session...";
-    }
-
-    @GET
-    @Path("/mkUser/{username}/{password}/{email}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String createUser(@PathParam("username") String username, @PathParam("password") String password, @PathParam("email") String email){
-        User u = new User(username, password, email);
-        allUsers.put(username, u);
-
-        System.out.println("allUsers: " + allUsers);
-        return "User " + username + " successfully added!";
     }
 
     @GET

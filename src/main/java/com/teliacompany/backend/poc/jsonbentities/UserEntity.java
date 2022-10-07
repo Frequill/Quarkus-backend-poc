@@ -1,16 +1,19 @@
-package com.teliacompany.backend.poc.entities;
+package com.teliacompany.backend.poc.jsonbentities;
 
-public class User {
+import javax.json.bind.annotation.JsonbProperty;
 
+public class UserEntity {
+
+    @JsonbProperty("username")
     private String username;
+    @JsonbProperty("password")
     private String password;
+    @JsonbProperty("email")
     private String email;
 
-    public User() {
+    public UserEntity() {}
 
-    }
-
-    public User(String username, String password, String email){
+    public UserEntity(String username, String password, String email){
         setUsername(username);
         setPassword(password);
         setEmail(email);
