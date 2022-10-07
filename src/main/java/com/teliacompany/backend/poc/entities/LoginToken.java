@@ -19,4 +19,6 @@ public class LoginToken {
     public void setFakedToken(String fakedToken){
         this.fakedToken = fakedToken;
     }
+
+
 }

@@ -13,6 +13,9 @@ public class LoginEntity {
     @JsonbProperty("password")
     private String jsonbPass;
 
+    @JsonbProperty("loginToken")
+    private String jsonbLoginToken;
+
     public LoginEntity(){}
 
     public LoginEntity(String status, String user, String password){
@@ -45,5 +48,13 @@ public class LoginEntity {
 
     public void setJsonbPass(String jsonbPass) {
         this.jsonbPass = jsonbPass;
+    }
+
+    public String getJsonbLoginToken() {
+        return jsonbLoginToken;
+    }
+
+    public void setJsonbLoginToken(String jsonbLoginToken) {
+        this.jsonbLoginToken = jsonbLoginToken;
     }
 }

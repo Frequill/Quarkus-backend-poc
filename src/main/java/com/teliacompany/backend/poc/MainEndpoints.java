@@ -64,8 +64,10 @@ public class MainEndpoints {
             // The account exists - set status to 200
             loginEntity.setJsonbStatus("200");
 
-            // Create fake web token and store it in a Hashmap, so we can keep track of active accounts
+            // Generates a fake web token, adds it to the "LoginEntity" so it can be returned to frontend,
+            // then adds it to a hashmap, so it can be stored, like in a DB
             LoginToken token = new LoginToken(loginEntity.getJsonbUsername());
+            loginEntity.setJsonbLoginToken(token.getFakedToken());
             activeAccounts.put(token.getFakedToken(), loginEntity.getJsonbUsername());
 
 
