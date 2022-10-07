@@ -94,7 +94,7 @@ public class MainEndpoints {
     @GET
     @Path("/mkUser/{username}/{password}/{email}")
     @Produces(MediaType.TEXT_PLAIN)
-    public String createUser(String username, String password, String email){
+    public String createUser(@PathParam("username") String username, @PathParam("password") String password, @PathParam("email") String email){
         User u = new User(username, password, email);
         allUsers.put(username, u);
 
