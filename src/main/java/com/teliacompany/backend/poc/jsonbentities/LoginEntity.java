@@ -4,7 +4,7 @@ import javax.json.bind.annotation.JsonbProperty;
 
 public class LoginEntity {
 
-    // BACKEND login entity should NOT contain loginToken
+    // BACKEND login entity needs to carry loginToken so that it can be sent to Frontend
 
     @JsonbProperty("status")
     private String jsonbStatus;
@@ -12,7 +12,6 @@ public class LoginEntity {
     private String jsonbUsername;
     @JsonbProperty("password")
     private String jsonbPass;
-
     @JsonbProperty("loginToken")
     private String jsonbLoginToken;
 
