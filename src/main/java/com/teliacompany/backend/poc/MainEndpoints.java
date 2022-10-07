@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Path("/myPath")
 public class MainEndpoints {
@@ -25,7 +26,9 @@ public class MainEndpoints {
      These two placeholders reset upon reload of code (kinda sucks)
      */
     public HashMap<String, UserEntity> allUsers = new HashMap<>(); // All created accounts
-    public HashMap<String, LoginToken> activeAccounts = new HashMap<>(); // All accounts currently logged-in
+
+    //First String is a loginToken, second is a username
+    public HashMap<String, String> activeAccounts = new HashMap<>(); // All accounts currently logged-in
 
 
     //Mini-constructor adds a "testUser" into the "allUsers" hashmap just so one is always there by default during development
@@ -48,13 +51,12 @@ public class MainEndpoints {
     @Consumes(MediaType.APPLICATION_JSON)
     public LoginEntity login(LoginEntity loginEntity){
 
-        if (activeAccounts.containsKey(loginEntity.getJsonbUsername())) {
+        if (new ArrayList<>(activeAccounts.values()).contains(loginEntity.getJsonbUsername())){
             loginEntity.setJsonbUsername("");
             loginEntity.setJsonbPass("");
             loginEntity.setJsonbStatus("500 : THIS ACCOUNT IS ALREADY LOGGED-IN");
             return loginEntity;
         }
-
 
         // Checks if a user with the inputted username exists and if that users password also matches inputted password
         if (Objects.equals(loginEntity.getJsonbPass(), allUsers.get(loginEntity.getJsonbUsername()).getPassword())){
@@ -64,12 +66,11 @@ public class MainEndpoints {
 
             // Create fake web token and store it in a Hashmap, so we can keep track of active accounts
             LoginToken token = new LoginToken(loginEntity.getJsonbUsername());
-            activeAccounts.put(loginEntity.getJsonbUsername(), token);
+            activeAccounts.put(token.getFakedToken(), loginEntity.getJsonbUsername());
 
 
             // TEST Want to see what the result looks like in "activeAccounts" hashmap
-            System.out.println("Result in activeAccounts = " + loginEntity.getJsonbUsername() + " " +
-                    activeAccounts.get(loginEntity.getJsonbUsername()).getFakedToken());
+            System.out.println("Result in activeAccounts = " + token.getFakedToken() + " " + loginEntity.getJsonbUsername());
 
             //Return final Jsonb
             return loginEntity;
@@ -98,15 +99,14 @@ public class MainEndpoints {
      * If you want to try this method, copy your login-token from backend-terminal after logged in (active accounts),
      then use it as your parameter curl http://localhost:8080/myPath/logout/**TOKEN HERE**
      */
+
     @GET
     @Path("/logout/{token}")
     @Produces(MediaType.TEXT_PLAIN)
     public String logout(String token) {
-        for (int i = 0; i < activeAccounts.size(); i++){
-            if (Objects.equals(token, activeAccounts.get(i))){
-                activeAccounts.remove(activeAccounts.get(i));
-                return "You have successfully been logged out";
-            }
+        if (activeAccounts.containsKey(token)) {
+            activeAccounts.remove(token);
+            return "User successfully logged out";
         }
         return "No such account is active in current session...";
     }
