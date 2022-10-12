@@ -9,7 +9,6 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Path("/myPath")
 public class MainEndpoints {
@@ -20,6 +19,14 @@ public class MainEndpoints {
     public String hello() {
         System.out.println("Hello message was sent! ;)");
         return "Hello from Julius Thomsen";
+    }
+
+    @GET
+    @Path("/helloName/{name}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String helloName(@PathParam("name") String name) {
+        System.out.println("Hello message was sent! ;)");
+        return "Hello, " + name + " from Julius Thomsen!";
     }
 
     /**
@@ -89,8 +96,18 @@ public class MainEndpoints {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public UserEntity createUser(UserEntity userEntity){
-        allUsers.put(userEntity.getUsername(), userEntity);
-        System.out.println("allUsers: " + allUsers);
+        // Just blocks you from adding the same user twice
+        if (allUsers.containsKey(userEntity.getUsername())){
+            userEntity.setEmail("");
+            userEntity.setPassword("");
+            userEntity.setUsername("ERROR: This user account already exists!");
+
+            System.out.println("Nothing was added to allUsers: " + allUsers);
+        }
+        else {
+            allUsers.put(userEntity.getUsername(), userEntity);
+            System.out.println("Successfully added to allUsers: " + allUsers);
+        }
         return userEntity;
     }
 
