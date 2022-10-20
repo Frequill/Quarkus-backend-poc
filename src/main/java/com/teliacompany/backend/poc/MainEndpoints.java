@@ -116,7 +116,7 @@ public class MainEndpoints {
      * Logged-in users tokens are stored in arrayList "activeAccounts"
 
      * If you want to try this method, copy your login-token from backend-terminal after logged in (active accounts),
-     then use it as your parameter curl http://localhost:8080/myPath/logout/**TOKEN HERE**
+     then use it as your parameter curl http://localhost:8082/myPath/logout/**TOKEN HERE**
      */
 
     @GET
