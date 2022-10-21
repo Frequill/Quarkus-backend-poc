@@ -8,13 +8,13 @@ public class RequestEntity {
     private String requestId;
     @JsonbProperty("name")
     private String name;
-    @JsonbProperty("specialAttack")
-    private String specialAttack;
+    @JsonbProperty("inputString")
+    private String inputString;
 
-    public RequestEntity(String requestId, String name, String specialAttack) {
+    public RequestEntity(String requestId, String name, String inputString) {
         this.requestId = requestId;
         this.name = name;
-        this.specialAttack = specialAttack;
+        this.inputString = inputString;
     }
 
     public RequestEntity() {}
@@ -35,11 +35,11 @@ public class RequestEntity {
         this.name = name;
     }
 
-    public String getSpecialAttack() {
-        return specialAttack;
+    public String getInputString() {
+        return inputString;
     }
 
-    public void setSpecialAttack(String specialAttack) {
-        this.specialAttack = specialAttack;
+    public void setInputString(String inputString) {
+        this.inputString = inputString;
     }
 }

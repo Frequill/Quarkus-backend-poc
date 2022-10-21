@@ -10,6 +10,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ ******************************************************* READ ME *******************************************************
+ *
+ This class has been made entirely irrelevant after the creation of the "RedisListener" class which handles communication
+ with backend through the Quarkus-redis-client instead of simple REST-easy commands. Use RedisListener.java INSTEAD OF THIS!
+
+ ******************************************************* READ ME *******************************************************
+ */
+
 @Path("/myPath")
 public class MainEndpoints {
 
@@ -32,10 +41,10 @@ public class MainEndpoints {
     /**
      These two placeholders reset upon reload of code (kinda sucks)
      */
-    public HashMap<String, UserEntity> allUsers = new HashMap<>(); // All created accounts
+    public static HashMap<String, UserEntity> allUsers = new HashMap<>(); // All created accounts
 
     //First String is a loginToken, second is a username
-    public HashMap<String, String> activeAccounts = new HashMap<>(); // All accounts currently logged-in
+    public static HashMap<String, String> activeAccounts = new HashMap<>(); // All accounts currently logged-in
 
 
     //Mini-constructor adds a "testUser" into the "allUsers" hashmap just so one is always there by default during development
